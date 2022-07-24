@@ -19,14 +19,19 @@ void uart_init()
     mmio_write(AUX_MU_CNTL_REG, 3);
 }
 
-unsigned int uart_is_ready()
+char uart_read()
 {
-    return mmio_read(AUX_MU_LSR_REG) & 0x20;
+    char c;
+
+    while(!(mmio_read(AUX_MU_LSR_REG) & 0x01));
+    c = (char) mmio_read(AUX_MU_IO_REG);
+
+    return c;
 }
 
 void uart_write(char c)
 {
-    while(!uart_is_ready());
+    while(!(mmio_read(AUX_MU_LSR_REG) & 0x20));
     mmio_write(AUX_MU_IO_REG, (unsigned int) c);
 }
 
@@ -36,5 +41,17 @@ void uart_print(char *str)
     {
         if(*str == '\n') uart_write('\r');
         uart_write(*str++);
+    }
+}
+
+void uart_hex(unsigned int hex)
+{
+    unsigned int n;
+    int c;
+
+    for(c=28; c>=0; c-=4) {
+        n = (hex >> c) & 0xF;
+        n += (n>9) ? 0x37 : 0x30;
+        uart_write(n);
     }
 }
