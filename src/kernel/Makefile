@@ -11,7 +11,7 @@ boot.o: boot.S
 	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c boot.S -o boot.o
 
 %.o: %.c
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@ -I../../include/kernel
 
 kernel8.img: boot.o $(OBJ_FILES)
 	$(TOOLCHAIN)/aarch64-none-elf-ld -nostdlib boot.o $(OBJ_FILES) -T linker.ld -o kernel8.elf

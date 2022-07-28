@@ -1,6 +1,9 @@
-#include "aux.h"
-#include "gpio.h"
-#include "uart.h"
+#include <types.h>
+#include <drivers/aux.h>
+#include <drivers/gpio.h>
+#include <drivers/uart.h>
+
+static uint8_t *itoa_buffer[32];
 
 void uart_init()
 {
@@ -19,23 +22,23 @@ void uart_init()
     mmio_write(AUX_MU_CNTL_REG, 3);
 }
 
-char uart_read()
+uint8_t uart_read()
 {
-    char c;
+    uint8_t c;
 
     while(!(mmio_read(AUX_MU_LSR_REG) & 0x01));
-    c = (char) mmio_read(AUX_MU_IO_REG);
+    c = (uint8_t) mmio_read(AUX_MU_IO_REG);
 
     return c;
 }
 
-void uart_write(char c)
+void uart_write(uint8_t c)
 {
     while(!(mmio_read(AUX_MU_LSR_REG) & 0x20));
     mmio_write(AUX_MU_IO_REG, (unsigned int) c);
 }
 
-void uart_print(char *str)
+void uart_print(uint8_t *str)
 {
     while(*str)
     {
@@ -44,14 +47,120 @@ void uart_print(char *str)
     }
 }
 
-void uart_hex(unsigned int hex)
+void uart_printf(uint8_t *str, ...)
 {
-    unsigned int n;
-    int c;
+    va_list args;
+    va_start(args, str);
 
-    for(c=28; c>=0; c-=4) {
-        n = (hex >> c) & 0xF;
-        n += (n>9) ? 0x37 : 0x30;
-        uart_write(n);
+    for(int i=0; str[i] != '\0'; i++)
+    {
+        if(str[i] == '%')
+        {
+            switch(str[i + 1])
+            {
+                case 'd':
+                case 'i':
+                case 'u':
+                case 'o':
+                case 'x':
+                case 'X':
+                    int32_t si = va_arg(args, int32_t), j = 0;
+                    uint32_t ui = (uint32_t) si;
+
+                    if(si == 0)
+                    {
+                        uart_write('0');
+                        i ++;
+                        break;
+                    }
+
+                    if(str[i+1] == 'd' || str[i+1] == 'i')
+                    {
+                        if(si < 0)
+                        {
+                            uart_write('-');
+                            si *= -1;
+                        }
+
+                        while(si != 0)
+                        {
+                            itoa_buffer[j] = '0' + (si % 10);
+                            si /= 10;
+                            j ++;
+                        }
+                    }
+                    else
+                    {
+                        if(str[i+1] == 'u')
+                        {
+                            while(ui != 0)
+                            {
+                                itoa_buffer[j] = '0' + (ui % 10);
+                                ui /= 10;
+                                j ++;
+                            }
+                        }
+                        else if(str[i+1] == 'o')
+                        {
+                            while(ui != 0)
+                            {
+                                itoa_buffer[j] = '0' + (ui % 8);
+                                ui /= 8;
+                                j ++;
+                            }
+                        }
+                        else if(str[i+1] == 'x')
+                        {
+                            while(ui != 0)
+                            {
+                                int x = (ui % 16);
+                                itoa_buffer[j] = (x < 10) ? ('0' + x) : ('a' + (x - 10));
+                                ui /= 16;
+                                j ++;
+                            }
+                        }
+                        else if(str[i+1] == 'X')
+                        {
+                            while(ui != 0)
+                            {
+                                int x = (ui % 16);
+                                itoa_buffer[j] = (x < 10) ? ('0' + x) : ('A' + (x - 10));
+                                ui /= 16;
+                                j ++;
+                            }
+                        }
+                    }
+
+                    do
+                    {
+                        j --;
+                        uart_write(itoa_buffer[j]);
+                    } while(j >= 0);
+
+                    i ++;
+                    break;                
+                case 'c':
+                    int c = va_arg(args, int);
+                    uart_write(c);
+                    i ++;
+                    break;
+
+                case 's':
+                    const char *s = va_arg(args, int*);
+                    for(int j=0; s[j] != '\0'; j++)
+                        uart_write(s[j]);
+                    i ++;
+                    break;
+
+                case '%':
+                    uart_write('%');
+                    i ++;
+                    break;
+            }
+        }
+        else
+        {
+            uart_write(str[i]);
+        }
     }
 }

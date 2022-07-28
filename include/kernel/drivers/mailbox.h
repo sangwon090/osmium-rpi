@@ -1,4 +1,5 @@
-#include "mmio.h"
+#include <types.h>
+#include <drivers/mmio.h>
 
 #define MAILBOX_BASE    PERIPHERAL_BASE + 0x0000B880
 
@@ -15,8 +16,8 @@
 #ifndef MAILBOX_H
 #define MAILBOX_H
 
-extern volatile unsigned int mailbox[128];
+extern volatile uint32_t mailbox[128];
 
-unsigned int mailbox_call();
+uint32_t mailbox_call();
 
 #endif

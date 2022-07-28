@@ -1,5 +1,5 @@
-#include "mailbox.h"
-#include "uart.h"
+#include <drivers/mailbox.h>
+#include <drivers/uart.h>
 
 volatile unsigned int __attribute__((aligned(16))) mailbox[128];
 

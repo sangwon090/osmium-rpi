@@ -1,4 +1,5 @@
-#include "mmio.h"
+#include <types.h>
+#include <drivers/mmio.h>
 
 #define GPIO_BASE   PERIPHERAL_BASE + 0x00200000
 
@@ -39,24 +40,24 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-unsigned int gpio_call(unsigned int pin_number, unsigned int value, unsigned int base, unsigned int field_size, unsigned int field_max);
+uint32_t gpio_call(uint32_t pin_number, uint32_t value, uint32_t base, uint32_t field_size, uint32_t field_max);
 
-inline unsigned int gpio_set(unsigned int pin_number, unsigned int value)
+inline uint32_t gpio_set(uint32_t pin_number, uint32_t value)
 {
     return gpio_call(pin_number, value, GPSET0, 1, GPIO_MAX_PIN);
 }
 
-inline unsigned int gpio_clear(unsigned int pin_number, unsigned int value)
+inline uint32_t gpio_clear(uint32_t pin_number, uint32_t value)
 {
     return gpio_call(pin_number, value, GPCLR0, 1, GPIO_MAX_PIN);
 }
 
-inline unsigned int gpio_pull(unsigned int pin_number, unsigned int value)
+inline uint32_t gpio_pull(uint32_t pin_number, uint32_t value)
 {
     return gpio_call(pin_number, value, GPPUPPDN0, 2, GPIO_MAX_PIN);
 }
 
-inline unsigned int gpio_function(unsigned int pin_number, unsigned int value)
+inline uint32_t gpio_function(uint32_t pin_number, uint32_t value)
 {
     return gpio_call(pin_number, value, GPFSEL0, 3, GPIO_MAX_PIN);
 }
