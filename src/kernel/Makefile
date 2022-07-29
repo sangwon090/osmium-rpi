@@ -2,7 +2,7 @@ C_FILES   = $(wildcard *.c) $(wildcard */*.c)
 OBJ_FILES = $(C_FILES:.c=.o)
 
 TOOLCHAIN = /Applications/ARM/bin
-GCC_FLAGS = -O2 -Wall -Wextra -ffreestanding -nostdinc -nostdlib -nostartfiles -D${RPI}
+GCC_FLAGS = -O2 -Wall -Wextra -ffreestanding -nostdinc -nostdlib -nostartfiles -mcpu=cortex-a53+nosimd -D${RPI}
 
 .PHONY: clean
 all: clean kernel8.img

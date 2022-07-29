@@ -1,5 +1,6 @@
 #include <drivers/uart.h>
 #include <drivers/mailbox.h>
+#include <drivers/framebuffer.h>
 #include <mmu.h>
 
 void main()
@@ -8,12 +9,28 @@ void main()
 
     uart_init();
     uart_printf("OSMIUM (%s %s)\n\n", __DATE__, __TIME__);
-    uart_printf("%c.%c.%c.%c.%c.%c.%c.%c.%c\n%s\n", 'G', 'L', 'A', 'M', 'O', 'R', 'O', 'U', 'S', "First class~~~\n");
-    uart_printf("%i %d %u %o %x %X\n", 0, -1, -1, 1024, 0xDEADC0DE, 0xDEADBEEF);
+
+    uart_printf("Initializing framebuffer... ");
+    if(fb_init(1920, 1080))
+    {
+        uart_printf("DONE\n");
+    }
+    else
+    {
+        uart_printf("ERROR\n");
+    }
+
+    for(int y=0; y<1080; y++)
+    {
+        for(int x=0; x<1920; x++)
+        {
+            fb_set_pixel(x, y, COLOR(240, 240, 240, 0));
+        }
+    }
 
     // print execution level
     asm volatile ("mrs %0, CurrentEL" : "=r" (reg));
-    uart_printf("Execution Level: EL%d\n", reg >> 2);
+    uart_printf("Execution Level: EL%d\n", (reg >> 2) & 0b11);
 
     // init mmu
     mmu_init();
