@@ -65,10 +65,21 @@ uint32_t fb_init(uint32_t width, uint32_t height)
     return -1;
 }
 
-void fb_set_pixel(uint32_t x, uint32_t y, uint32_t color)
+inline void fb_draw_pixel(uint32_t x, uint32_t y, uint32_t color)
 {
     int32_t offset = (x * 4) + (y * pitch);
 
     buffer[offset] = color;
     *((uint32_t*)(buffer + offset)) = color;
+}
+
+inline void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color)
+{
+    for(int i=0; i<width; i++)
+    {
+        for(int j=0; j<height; j++)
+        {
+            fb_draw_pixel(x + i, y + j, color);
+        }
+    }
 }

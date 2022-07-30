@@ -11,9 +11,10 @@ void main()
     uart_printf("OSMIUM (%s %s)\n\n", __DATE__, __TIME__);
 
     uart_printf("Initializing framebuffer... ");
-    if(fb_init(1920, 1080))
+    if(fb_init(640, 360))
     {
         uart_printf("DONE\n");
+        fb_draw_rect(0, 0, 640, 360, 0x00FFFFFF);
     }
     else
     {
