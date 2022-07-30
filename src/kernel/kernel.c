@@ -20,26 +20,19 @@ void main()
         uart_printf("ERROR\n");
     }
 
-    for(int y=0; y<1080; y++)
-    {
-        for(int x=0; x<1920; x++)
-        {
-            fb_set_pixel(x, y, COLOR(240, 240, 240, 0));
-        }
-    }
-
-    // print execution level
-    asm volatile ("mrs %0, CurrentEL" : "=r" (reg));
-    uart_printf("Execution Level: EL%d\n", (reg >> 2) & 0b11);
+    // init exception vector
+    uart_printf("Initializing exception... ");
+    irq_vector_init();
+    timer_init();
+    enable_interrupt_controller();
+    irq_enable();
+    uart_printf("DONE\n");
 
     // init mmu
     mmu_init();
 
     while(1)
     {
-        uint8_t c = uart_read();
-        uart_write(c);
-
-        if(c == '\r') uart_write('\n');
+        uart_write(uart_read());
     }
 }

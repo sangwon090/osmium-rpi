@@ -1,20 +1,22 @@
 C_FILES   = $(wildcard *.c) $(wildcard */*.c)
-OBJ_FILES = $(C_FILES:.c=.o)
+ASM_FILES = $(wildcard *.S) $(wildcard */*.S)
+OBJ_FILES = $(C_FILES:%.c=%_c.o) $(ASM_FILES:%.S=%_s.o)
 
 TOOLCHAIN = /Applications/ARM/bin
-GCC_FLAGS = -O2 -Wall -Wextra -ffreestanding -nostdinc -nostdlib -nostartfiles -mcpu=cortex-a53+nosimd -D${RPI}
+GCC_FLAGS = -O2 -Wall -Wextra -ffreestanding -nostdinc -nostdlib -nostartfiles -mcpu=cortex-a53+nosimd -D${RPI} -I../../include/kernel
+ASM_FLAGS =  -I../../include/kernel
 
 .PHONY: clean
 all: clean kernel8.img
 
-boot.o: boot.S
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c boot.S -o boot.o
+%_s.o: %.S
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(ASM_FLAGS) -c $< -o $@
 
-%.o: %.c
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@ -I../../include/kernel
+%_c.o: %.c
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@
 
-kernel8.img: boot.o $(OBJ_FILES)
-	$(TOOLCHAIN)/aarch64-none-elf-ld -nostdlib boot.o $(OBJ_FILES) -T linker.ld -o kernel8.elf
+kernel8.img: $(OBJ_FILES)
+	$(TOOLCHAIN)/aarch64-none-elf-ld -nostdlib $(OBJ_FILES) -T linker.ld -o kernel8.elf
 	$(TOOLCHAIN)/aarch64-none-elf-objcopy -O binary kernel8.elf kernel8.img
 
 clean:
