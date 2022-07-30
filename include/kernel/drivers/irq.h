@@ -1,3 +1,4 @@
+#include <types.h>
 #include <drivers/mmio.h>
 
 #ifndef IRQ_H
@@ -22,5 +23,9 @@
 void irq_vector_init();
 void irq_enable();
 void irq_disable();
+
+void enable_interrupt_controller();
+void invalid_entry(int32_t type, uint64_t esr, uint64_t elr);
+void handle_irq();
 
 #endif

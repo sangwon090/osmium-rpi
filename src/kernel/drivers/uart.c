@@ -3,7 +3,7 @@
 #include <drivers/gpio.h>
 #include <drivers/uart.h>
 
-static uint8_t *itoa_buffer[32];
+static int8_t *itoa_buffer[32];
 
 void uart_init()
 {
@@ -22,23 +22,23 @@ void uart_init()
     mmio_write(AUX_MU_CNTL_REG, 3);
 }
 
-uint8_t uart_read()
+int8_t uart_read()
 {
-    uint8_t c;
+    int8_t c;
 
     while(!(mmio_read(AUX_MU_LSR_REG) & 0x01));
-    c = (uint8_t) mmio_read(AUX_MU_IO_REG);
+    c = (int8_t) mmio_read(AUX_MU_IO_REG);
 
     return c;
 }
 
-void uart_write(uint8_t c)
+void uart_write(int8_t c)
 {
     while(!(mmio_read(AUX_MU_LSR_REG) & 0x20));
-    mmio_write(AUX_MU_IO_REG, (unsigned int) c);
+    mmio_write(AUX_MU_IO_REG, (uint32_t) c);
 }
 
-void uart_print(uint8_t *str)
+void uart_print(int8_t *str)
 {
     while(*str)
     {
@@ -47,7 +47,7 @@ void uart_print(uint8_t *str)
     }
 }
 
-void uart_printf(uint8_t *str, ...)
+void uart_printf(int8_t *str, ...)
 {
     va_list args;
     va_start(args, str);
@@ -146,7 +146,7 @@ void uart_printf(uint8_t *str, ...)
                     break;
 
                 case 's':
-                    const char *s = va_arg(args, int*);
+                    const char *s = va_arg(args, const char*);
                     for(int j=0; s[j] != '\0'; j++)
                         uart_write(s[j]);
                     i ++;

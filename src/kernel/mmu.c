@@ -8,6 +8,36 @@ extern volatile uint8_t _end;
 
 #define PAGESIZE    4096
 
+// Execute Never
+#define MMU_UXN_OFF (0b0 << 54)
+#define MMU_UXN_ON  (0b1 << 54)
+#define MMU_PXN_OFF (0b0 << 53)
+#define MMU_PXN_ON  (0b1 << 53)
+
+// Access Flag
+#define MMU_AF_NOT_ACCESSED (0b0 << 10)
+#define MMU_AF_ACCESSED     (0b1 << 10)
+
+// Shareable Attribute
+#define MMU_SH_NON_SHAREABLE    (0b00 << 8)
+#define MMU_SH_OUTER_SHAREABLE  (0b10 << 8)
+#define MMU_SH_INNER_SHAREABLE  (0b11 << 8)
+
+// Access Permission
+#define MMU_AP_RW       (0b0 << 7)
+#define MMU_AP_RO       (0b1 << 7)
+#define MMU_AP_USER     (0b0 << 6)
+#define MMU_AP_KERNEL   (0b1 << 6)
+
+// MAIR
+#define MMU_MAIR_MEMORY         (0 << 2)
+#define MMU_MAIR_DEVICE         (1 << 2)
+#define MMU_MAIR_NON_CACHEABLE  (2 << 2)
+
+#define MMU_BLOCK   0b01
+#define MMU_TABLE   0b11
+
+// ==========
 // granularity
 #define PT_PAGE     0b11        // 4k granule
 #define PT_BLOCK    0b01        // 2M granule
@@ -25,16 +55,19 @@ extern volatile uint8_t _end;
 #define PT_MEM      (0<<2)      // normal memory
 #define PT_DEV      (1<<2)      // device MMIO
 #define PT_NC       (2<<2)      // non-cachable
+// =========
+
 
 void mmu_init()
 {
     uint64_t reg, pa_range;
-    uint64_t *ptable = (unsigned long*) &_end;
+    uint64_t *ptable = (uint64_t*) &_end;
     unsigned long b, data_page = (unsigned long)&_data/PAGESIZE;
 
     // TTBR0
-    ptable[0] = (unsigned long)((unsigned char*) &_end + PAGE_SIZE * 2);
-                
+    // if it doesnt work: uint64_t --> uint32_t
+    //ptable[0] = (uint64_t)| MMU_TABLE | MMU_AF_ACCESSED | MMU_AP_USER | MMU_SH_INNER_SHAREABLE | MMU_MAIR_MEMORY;
+
     ptable[0]=(unsigned long)((unsigned char*)&_end+2*PAGESIZE) |    // physical address
         PT_PAGE |     // it has the "Present" flag, which must be set, and we have area in it mapped by pages
         PT_AF |       // accessed flag. Without this we're going to have a Data Abort exception
@@ -109,8 +142,8 @@ void mmu_init()
 
     // set TCR_EL1
     reg  = 0;
-    reg |= (0b0 << 38);         // TBI1: top byte used in the address calculation
-    reg |= (0b0 << 37);         // TBI0: top byte used in the address calculation
+    reg |= (0b0ul << 38);         // TBI1: top byte used in the address calculation
+    reg |= (0b0ul << 37);         // TBI0: top byte used in the address calculation
     reg |= (pa_range << 32);    // IPS size: physical address range supported
 
     reg |= (0b10 << 30);        // TG1: 4KB

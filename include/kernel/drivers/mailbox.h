@@ -1,6 +1,9 @@
 #include <types.h>
 #include <drivers/mmio.h>
 
+#ifndef MAILBOX_H
+#define MAILBOX_H
+
 #define MAILBOX_BASE    PERIPHERAL_BASE + 0x0000B880
 
 #define MAILBOX_READ    MAILBOX_BASE + 0x00
@@ -13,8 +16,6 @@
 #define MAILBOX_FULL    0x80000000
 #define MAILBOX_EMPTY   0x40000000
 
-#ifndef MAILBOX_H
-#define MAILBOX_H
 
 extern volatile uint32_t mailbox[128];
 

@@ -1,5 +1,8 @@
 #include "mmio.h"
 
+#ifndef AUX_H
+#define AUX_H
+
 #define AUX_BASE    PERIPHERAL_BASE + 0x00215000
 
 #define AUX_IRQ                 AUX_BASE + 0x00
@@ -39,3 +42,5 @@
 #define AUX_SPI2_TXHOLD_REGb    AUX_BASE + 0xF4
 #define AUX_SPI2_TXHOLD_REGc    AUX_BASE + 0xF8
 #define AUX_SPI2_TXHOLD_REGd    AUX_BASE + 0xFC
+
+#endif

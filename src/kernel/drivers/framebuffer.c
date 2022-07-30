@@ -1,10 +1,10 @@
 #include <drivers/framebuffer.h>
 #include <drivers/mailbox.h>
 
-static uint32_t width, height, pitch, pixel_order;
+static uint32_t pitch;
 uint8_t *buffer;
 
-uint32_t fb_init(uint32_t width, uint32_t height)
+void fb_init(uint32_t width, uint32_t height)
 {
     mailbox[0] = 4 * 35;    // size: 35
     mailbox[1] = 0;         // code
@@ -53,16 +53,9 @@ uint32_t fb_init(uint32_t width, uint32_t height)
     if(mailbox_call() && mailbox[20] == 32 && mailbox[28] != 0)
     {
         mailbox[28] &= 0x3FFFFFFF;
-        width = mailbox[10];
-        height = mailbox[11];
         pitch = mailbox[33];
-        pixel_order = mailbox[24];
         buffer = (uint32_t*)((long) mailbox[28]);
-
-        return 1;
     }
-
-    return -1;
 }
 
 inline void fb_draw_pixel(uint32_t x, uint32_t y, uint32_t color)
@@ -75,9 +68,9 @@ inline void fb_draw_pixel(uint32_t x, uint32_t y, uint32_t color)
 
 inline void fb_draw_rect(uint32_t x, uint32_t y, uint32_t width, uint32_t height, uint32_t color)
 {
-    for(int i=0; i<width; i++)
+    for(uint32_t i=0; i<width; i++)
     {
-        for(int j=0; j<height; j++)
+        for(uint32_t j=0; j<height; j++)
         {
             fb_draw_pixel(x + i, y + j, color);
         }

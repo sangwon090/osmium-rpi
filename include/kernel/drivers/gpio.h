@@ -1,6 +1,9 @@
 #include <types.h>
 #include <drivers/mmio.h>
 
+#ifndef GPIO_H
+#define GPIO_H
+
 #define GPIO_BASE   PERIPHERAL_BASE + 0x00200000
 
 #define GPFSEL0     GPIO_BASE + 0x00
@@ -36,9 +39,6 @@
 
 #define GPIO_MAX_PIN        53
 #define GPIO_FUNCTION_ALT5  2
-
-#ifndef GPIO_H
-#define GPIO_H
 
 uint32_t gpio_call(uint32_t pin_number, uint32_t value, uint32_t base, uint32_t field_size, uint32_t field_max);
 

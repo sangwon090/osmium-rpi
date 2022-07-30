@@ -1,4 +1,5 @@
 #include <drivers/mmio.h>
+#include <drivers/uart.h>
 #include <drivers/timer.h>
 
 unsigned int curVal = 0;

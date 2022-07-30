@@ -1,6 +1,7 @@
 #include <drivers/mmio.h>
 #include <drivers/uart.h>
 #include <drivers/irq.h>
+#include <drivers/timer.h>
 
 const char *error_messages[] = {
 	"SYNC_INVALID_EL1t",
