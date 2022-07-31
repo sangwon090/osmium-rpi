@@ -1,5 +1,10 @@
 # OSMIUM
 
+![GitHub](https://img.shields.io/github/license/sangwon090/osmium?style=flat-square)
+![Lines of code](https://img.shields.io/tokei/lines/github/sangwon090/osmium?style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/sangwon090/osmium?style=flat-square)
+![GitHub closed issues](https://img.shields.io/github/issues-closed/sangwon090/osmium?style=flat-square)
+
 An Operating System for Raspberry Pi
 
 ## Milestones
