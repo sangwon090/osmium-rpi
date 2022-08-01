@@ -11,9 +11,9 @@ An Operating System for Raspberry Pi
 
 - [x] UART
 - [x] Mailbox
-- [ ] Interrupt Handling
+- [x] Interrupt Handling
   - [x] Legacy Interrupt Controller
-  - [ ] GIC-400
+  - [x] GIC-400
 - [ ] Memory Management
   - [x] Virtual Memory (partially implemented)
   - [ ] Memory Allocator
