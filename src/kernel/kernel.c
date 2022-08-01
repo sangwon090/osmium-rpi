@@ -3,17 +3,17 @@
 #include <drivers/framebuffer.h>
 #include <drivers/irq.h>
 #include <drivers/timer.h>
-#include <mmu.h>
+#include <drivers/mmu.h>
 
 void main()
 {
     uart_init();
-    uart_printf("OSMIUM (%s %s)\n\n", __DATE__, __TIME__);
+    uart_printf("OSMIUM (%s %s)\r\n\r\n", __DATE__, __TIME__);
 
     uart_printf("Initializing framebuffer... ");
     fb_init(640, 360);
     fb_draw_rect(0, 0, 640, 360, 0x00FFFFFF);
-    uart_printf("DONE\n");
+    uart_printf("DONE\r\n");
 
     // init exception vector
     uart_printf("Initializing exception... ");
@@ -21,10 +21,10 @@ void main()
     timer_init();
     enable_interrupt_controller();
     irq_enable();
-    uart_printf("DONE\n");
+    uart_printf("DONE\r\n");
 
     // init mmu
-    mmu_init();
+    // mmu_init();
 
     while(1)
     {

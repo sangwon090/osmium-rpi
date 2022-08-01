@@ -15,16 +15,21 @@
 #define DISABLE_IRQS_2          PERIPHERAL_BASE + 0x0000B220
 #define DISABLE_BASIC_IRQS      PERIPHERAL_BASE + 0x0000B224
 
-#define SYSTEM_TIMER_IRQ_0	(1 << 0)
-#define SYSTEM_TIMER_IRQ_1	(1 << 1)
-#define SYSTEM_TIMER_IRQ_2	(1 << 2)
-#define SYSTEM_TIMER_IRQ_3	(1 << 3)
+#define IRQ_PENDING             PERIPHERAL_BASE + 0xB204
+#define ENABLE_IRQS             PERIPHERAL_BASE + 0xB214
+
+#define SYSTEM_TIMER_IRQ_0  (1 << 0)
+#define SYSTEM_TIMER_IRQ_1  (1 << 1)
+#define SYSTEM_TIMER_IRQ_2  (1 << 2)
+#define SYSTEM_TIMER_IRQ_3  (1 << 3)
 
 void irq_vector_init();
 void irq_enable();
 void irq_disable();
 
 void enable_interrupt_controller();
+void enable_interrupt(uint32_t irq);
+void assign_target(uint32_t irq, uint32_t cpu);
 void invalid_entry(int32_t type, uint64_t esr, uint64_t elr);
 void handle_irq();
 

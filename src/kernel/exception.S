@@ -1,8 +1,8 @@
 #include <exception.h>
 
 .macro    ventry    label
-    .align    7
-    b    \label
+    .balign 0x80
+    b \label
 .endm
 
 .macro pusha
@@ -55,7 +55,7 @@
     b err_hang
 .endm
 
-.align 11
+.balign 0x800
 .global vectors
 vectors:
     ventry sync_invalid_el1t

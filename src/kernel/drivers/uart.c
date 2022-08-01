@@ -42,7 +42,6 @@ void uart_print(int8_t *str)
 {
     while(*str)
     {
-        if(*str == '\n') uart_write('\r');
         uart_write(*str++);
     }
 }
