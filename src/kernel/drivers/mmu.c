@@ -1,5 +1,5 @@
 #include <drivers/mmio.h>
-#include <mmu.h>
+#include <drivers/mmu.h>
 
 #define PAGE_SIZE 4096
 
