@@ -60,11 +60,11 @@ void invalid_entry(int32_t type, uint64_t esr, uint64_t elr)
 
     uart_printf("INVALID EXCEPTION\r\n");
     uart_printf("TYPE: %s\r\n", error_messages[type]);
-    uart_printf(" ESR: %X_%X\r\n", esr >> 32, esr);
-    uart_printf(" -  EC: %X\r\n", (esr >> 26) & 0b111111);
-    uart_printf(" -  IL: %X\r\n", (esr >> 25) & 0b1);
-    uart_printf(" - ISS: %X\r\n", esr & 0xFFFFFF);
-    uart_printf(" ELR: %X_%X\r\n", elr >> 32, elr);
+    uart_printf("ESR: %X_%X\r\n", esr >> 32, esr);
+    uart_printf("-  EC: %X\r\n", (esr >> 26) & 0b111111);
+    uart_printf("-  IL: %X\r\n", (esr >> 25) & 0b1);
+    uart_printf("- ISS: %X\r\n", esr & 0xFFFFFF);
+    uart_printf("ELR: %X_%X\r\n", elr >> 32, elr);
 }
 
 void handle_irq()
