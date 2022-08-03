@@ -10,14 +10,19 @@ ASM_FLAGS =  -I../../include/kernel
 all: clean kernel8.img
 
 %.s.o: %.S
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(ASM_FLAGS) -c $< -o $@
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(ASM_FLAGS) -c $< -o $@ -g
 
 %.c.o: %.c
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@ -g
 
-kernel8.img: $(OBJ_FILES)
+kernel8.elf: $(OBJ_FILES)
 	$(TOOLCHAIN)/aarch64-none-elf-ld -nostdlib $(OBJ_FILES) -T linker.ld -o kernel8.elf
+
+kernel8.img: kernel8.elf
 	$(TOOLCHAIN)/aarch64-none-elf-objcopy -O binary kernel8.elf kernel8.img
 
+kernel8.sym: kernel8.elf
+	$(TOOLCHAIN)/aarch64-none-elf-objcopy --only-keep-debug kernel8.elf kernel8.sym
+
 clean:
-	rm -f *.o */*.o *.elf */*.elf *.img */*.img *.sym
+	rm -f *.o */*.o *.elf */*.elf *.img */*.img *.sym */*.sym
