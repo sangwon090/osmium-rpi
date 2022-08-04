@@ -15,7 +15,7 @@ void task(int8_t *str)
     while(1)
     {
         uart_printf("[%s] allocated pages: %d\r\n", str, mm_get_count());    
-        uart_printf("[%s] max pages: %d\r\n\r\n", str, MM_PAGING_PAGES);
+        uart_printf("[%s] max pages: %d\r\n\r\n", str, PAGING_PAGES);
 
         for(int i=0; i<1000000; i++)
         {
@@ -39,7 +39,7 @@ void process(char *array)
     }
 }
 
-void main()
+void kernel_main()
 {
     uart_init();
     uart_printf("OSMIUM (%s %s)\r\n\r\n", __DATE__, __TIME__);
