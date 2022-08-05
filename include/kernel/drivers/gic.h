@@ -1,5 +1,3 @@
-#include <types.h>
-
 #ifndef GIC_H
 #define GIC_H
 

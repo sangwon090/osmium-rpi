@@ -1,7 +1,7 @@
-#include "mmio.h"
-
 #ifndef AUX_H
 #define AUX_H
+
+#include <drivers/mmio.h>
 
 #define AUX_BASE    PERIPHERAL_BASE + 0x00215000
 

@@ -1,8 +1,8 @@
-#include <types.h>
-#include <drivers/mmio.h>
-
 #ifndef GPIO_H
 #define GPIO_H
+
+#include <types.h>
+#include <drivers/mmio.h>
 
 #define GPIO_BASE   PERIPHERAL_BASE + 0x00200000
 

@@ -1,5 +1,4 @@
 #include <drivers/mmio.h>
-#include <drivers/mmu.h>
 
 #define PAGE_SIZE 4096
 
@@ -60,15 +59,17 @@ extern volatile uint8_t _end;
 
 void mmu_init()
 {
+    return;
+    
     uint64_t reg, pa_range;
     uint64_t *ptable = (uint64_t*) &_end;
-    unsigned long b, data_page = (unsigned long)&_data/PAGESIZE;
+    uint64_t b, data_page = (uint64_t)&_data/PAGESIZE;
 
     // TTBR0
     // if it doesnt work: uint64_t --> uint32_t
     //ptable[0] = (uint64_t)| MMU_TABLE | MMU_AF_ACCESSED | MMU_AP_USER | MMU_SH_INNER_SHAREABLE | MMU_MAIR_MEMORY;
 
-    ptable[0]=(unsigned long)((unsigned char*)&_end+2*PAGESIZE) |    // physical address
+    ptable[0]=(uint64_t)((uint8_t*)&_end+2*PAGESIZE) |    // physical address
         PT_PAGE |     // it has the "Present" flag, which must be set, and we have area in it mapped by pages
         PT_AF |       // accessed flag. Without this we're going to have a Data Abort exception
         PT_USER |     // non-privileged
@@ -76,7 +77,7 @@ void mmu_init()
         PT_MEM;       // normal memory
 
     // identity L2, first 2M block
-    ptable[2*512]=(unsigned long)((unsigned char*)&_end+3*PAGESIZE) | // physical address
+    ptable[2*512]=(uint64_t)((uint8_t*)&_end+3*PAGESIZE) | // physical address
         PT_PAGE |     // we have area in it mapped by pages
         PT_AF |       // accessed flag
         PT_USER |     // non-privileged
@@ -87,7 +88,7 @@ void mmu_init()
     b=PERIPHERAL_BASE>>21;
     // skip 0th, as we're about to map it by L3
     for(uint64_t r=1;r<512;r++)
-        ptable[2*512+r]=(unsigned long)((r<<21)) |  // physical address
+        ptable[2*512+r]=(uint64_t)((r<<21)) |  // physical address
         PT_BLOCK |    // map 2M block
         PT_AF |       // accessed flag
         PT_NX |       // no execute
@@ -96,7 +97,7 @@ void mmu_init()
 
     // identity L3
     for(uint64_t r=0;r<512;r++)
-        ptable[3*512+r]=(unsigned long)(r*PAGESIZE) |   // physical address
+        ptable[3*512+r]=(uint64_t)(r*PAGESIZE) |   // physical address
         PT_PAGE |     // map 4k
         PT_AF |       // accessed flag
         PT_USER |     // non-privileged
@@ -104,7 +105,7 @@ void mmu_init()
         ((r<0x80||r>=data_page)? PT_RW|PT_NX : PT_RO); // different for code and data
 
     // TTBR1, kernel L1
-    ptable[512+511]=(unsigned long)((unsigned char*)&_end+4*PAGESIZE) | // physical address
+    ptable[512+511]=(uint64_t)((uint8_t*)&_end+4*PAGESIZE) | // physical address
         PT_PAGE |     // we have area in it mapped by pages
         PT_AF |       // accessed flag
         PT_KERNEL |   // privileged
@@ -112,7 +113,7 @@ void mmu_init()
         PT_MEM;       // normal memory
 
     // kernel L2
-    ptable[4*512+511]=(unsigned long)((unsigned char*)&_end+5*PAGESIZE) |   // physical address
+    ptable[4*512+511]=(uint64_t)((uint8_t*)&_end+5*PAGESIZE) |   // physical address
         PT_PAGE |     // we have area in it mapped by pages
         PT_AF |       // accessed flag
         PT_KERNEL |   // privileged
@@ -120,7 +121,7 @@ void mmu_init()
         PT_MEM;       // normal memory
 
     // kernel L3
-    ptable[5*512]=(unsigned long)(PERIPHERAL_BASE+0x00201000) |   // physical address
+    ptable[5*512]=(uint64_t)(PERIPHERAL_BASE+0x00201000) |   // physical address
         PT_PAGE |     // map 4k
         PT_AF |       // accessed flag
         PT_NX |       // no execute
@@ -162,8 +163,8 @@ void mmu_init()
     asm volatile("isb");
 
     // set TTBR
-    asm volatile("msr TTBR0_EL1, %0" : : "r" ((unsigned long) &_end + 1));
-    asm volatile("msr TTBR1_EL1, %0" : : "r" ((unsigned long) &_end + 4097));
+    asm volatile("msr TTBR0_EL1, %0" : : "r" ((uint64_t) &_end + 1));
+    asm volatile("msr TTBR1_EL1, %0" : : "r" ((uint64_t) &_end + 4097));
 
     // set SCTLR
     asm volatile("dsb ish");

@@ -1,4 +1,3 @@
-#include <types.h>
 #include <drivers/aux.h>
 #include <drivers/gpio.h>
 #include <drivers/uart.h>

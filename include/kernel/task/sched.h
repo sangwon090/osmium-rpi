@@ -15,9 +15,6 @@ void ret_from_fork();
 
 extern void cpu_switch_to(task_t *prev, task_t *next);
 
-#define INIT_TASK \
-/*cpu_context*/	{ {0,0,0,0,0,0,0,0,0,0,0,0,0}, \
-/* state etc */	0,0,1, 0 \
-}
+#define INIT_TASK { {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 0, 0, 1, 0 }
 
 #endif

@@ -1,7 +1,7 @@
-#include <drivers/mmio.h>
-
 #ifndef TIMER_H
 #define TIMER_H
+
+#include <drivers/mmio.h>
 
 #define TIMER_BASE  PERIPHERAL_BASE + 0x00003000
 

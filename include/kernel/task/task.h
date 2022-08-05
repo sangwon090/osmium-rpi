@@ -1,4 +1,3 @@
-#include <types.h>
 
 #ifndef TASK_H
 #define TASK_H
@@ -9,6 +8,8 @@
 #define TASK_LAST   tasks[NR_TASKS - 1]
 
 #define TASK_RUNNING    0
+
+#include <types.h>
 
 typedef struct {
     uint64_t x19;

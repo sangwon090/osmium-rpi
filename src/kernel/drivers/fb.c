@@ -1,4 +1,4 @@
-#include <drivers/framebuffer.h>
+#include <drivers/fb.h>
 #include <drivers/mailbox.h>
 
 static uint32_t pitch;
@@ -6,8 +6,8 @@ uint8_t *buffer;
 
 void fb_init(uint32_t width, uint32_t height)
 {
-    mailbox[0] = 4 * 35;    // size: 35
-    mailbox[1] = 0;         // code
+    mailbox[0] = 4 * 35;        // size: 35
+    mailbox[1] = 0;             // code
 
     mailbox[2] = 0x00048003;    // set physical width/height
     mailbox[3] = 8;             // size

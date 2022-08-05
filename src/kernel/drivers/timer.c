@@ -1,7 +1,7 @@
 #include <drivers/mmio.h>
-#include <drivers/uart.h>
 #include <drivers/timer.h>
-#include <task/scheduler.h>
+#include <drivers/uart.h>
+#include <task/sched.h>
 
 static uint64_t jiffies, counter;
 

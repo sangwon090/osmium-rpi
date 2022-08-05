@@ -1,7 +1,7 @@
-#include <types.h>
-
 #ifndef MMIO_H
 #define MMIO_H
+
+#include <types.h>
 
 #ifdef RPI4
     #define PERIPHERAL_BASE 0xFE000000

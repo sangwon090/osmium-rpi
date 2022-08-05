@@ -1,8 +1,7 @@
-#include <types.h>
-#include <drivers/mmio.h>
-
 #ifndef IRQ_H
 #define IRQ_H
+
+#include <drivers/mmio.h>
 
 #define IRQ_BASIC_PENDING       PERIPHERAL_BASE + 0x0000B200
 #define IRQ_PENDING_1           PERIPHERAL_BASE + 0x0000B204
@@ -22,6 +21,8 @@
 #define SYSTEM_TIMER_IRQ_1  (1 << 1)
 #define SYSTEM_TIMER_IRQ_2  (1 << 2)
 #define SYSTEM_TIMER_IRQ_3  (1 << 3)
+
+#include <types.h>
 
 void irq_vector_init();
 void irq_enable();

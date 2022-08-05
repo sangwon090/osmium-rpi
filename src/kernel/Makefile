@@ -10,7 +10,7 @@ ASM_FLAGS =  -I../../include/kernel
 all: clean kernel8.img
 
 %.s.o: %.S
-	$(TOOLCHAIN)/aarch64-none-elf-gcc $(ASM_FLAGS) -c $< -o $@ -g
+	$(TOOLCHAIN)/aarch64-none-elf-gcc $(ASM_FLAGS) -c $< -o $@ -g -D__ASSEMBLER__
 
 %.c.o: %.c
 	$(TOOLCHAIN)/aarch64-none-elf-gcc $(GCC_FLAGS) -c $< -o $@ -g

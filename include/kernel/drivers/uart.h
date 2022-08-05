@@ -1,8 +1,8 @@
-#include <types.h>
-#include <drivers/gpio.h>
-
 #ifndef UART_H
 #define UART_H
+
+#include <types.h>
+#include <drivers/gpio.h>
 
 void uart_init();
 int8_t uart_read();

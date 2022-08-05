@@ -1,5 +1,5 @@
-#include <task/scheduler.h>
 #include <mm.h>
+#include <task/sched.h>
 
 static task_t init_task = INIT_TASK;
 task_t *current = &(init_task);
