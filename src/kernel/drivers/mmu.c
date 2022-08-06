@@ -57,7 +57,7 @@ extern volatile uint8_t _end;
 // =========
 
 
-void mmu_init()
+void __mmu_init()
 {
     return;
     

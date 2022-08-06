@@ -15,6 +15,8 @@ SECTIONS
     }
     . = ALIGN(4096);
     _end = .;
+    . = ALIGN(0x00001000);
+    pg_dir = .;
 
    /DISCARD/ : { *(.comment) *(.gnu*) *(.note*) *(.eh_frame*) }
 }
