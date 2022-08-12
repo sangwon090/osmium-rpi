@@ -1,4 +1,4 @@
-# OSMIUM
+# OSMIUM-RPI
 
 ![GitHub](https://img.shields.io/github/license/sangwon090/osmium?style=flat-square)
 ![Lines of code](https://img.shields.io/tokei/lines/github/sangwon090/osmium?style=flat-square)
@@ -6,6 +6,11 @@
 ![GitHub closed issues](https://img.shields.io/github/issues-closed/sangwon090/osmium?style=flat-square)
 
 An Operating System for Raspberry Pi
+
+## ⚠ THIS REPOSITORY HAS BEEN ARCHIVED! Visit new repository: [OSMIUM for x86-64]()
+
+I found that developing an OS for RPI is very difficult because there are so many undocumented features.  
+This is why I'm trying to rewrite OSMIUM for x86-64 machines.
 
 ## Milestones
 
