@@ -7,7 +7,7 @@
 
 An Operating System for Raspberry Pi
 
-## ⚠ THIS REPOSITORY HAS BEEN ARCHIVED! Visit new repository: [OSMIUM for x86-64]()
+## ⚠ THIS REPOSITORY HAS BEEN ARCHIVED! Visit new repository: [OSMIUM for x86-64](https://github.com/sangwon090/osmium/)
 
 I found that developing an OS for RPI is very difficult because there are so many undocumented features.  
 This is why I'm trying to rewrite OSMIUM for x86-64 machines.
